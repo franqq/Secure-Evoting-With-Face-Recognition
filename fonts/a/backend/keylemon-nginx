@@ -1,0 +1,24 @@
+server {
+
+    listen 80;
+
+    location / {
+        root PATH_TO_KEYLEMON_SRC/src;
+    }
+
+    location ~ /backend/(.*) {
+        root PATH_TO_KEYLEMON_BACKEND/backend/php/;
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root/keylemon.php;
+        fastcgi_param QUERY_STRING            $query_string;
+        fastcgi_param REQUEST_METHOD          $request_method;
+        fastcgi_param CONTENT_TYPE            $content_type;
+        fastcgi_param CONTENT_LENGTH          $content_length;
+        fastcgi_param REQUEST_URI             /$1;
+    }
+
+    location ~ /\.htaccess {
+        deny all;
+    } 
+
+}

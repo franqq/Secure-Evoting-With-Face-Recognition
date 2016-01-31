@@ -1,0 +1,87 @@
+<!--
+
+    This example shows how start asynchronously the KeyLemonJS into a float window
+
+-->
+<!Doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>KeyLemon js version 2.1</title>
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        /**
+        * Load the KeyLemonJS script asynchronously
+        */
+        function runKeyLemonJS() {
+            var head = document.getElementsByTagName('head')[0];
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.onreadystatechange = function () {
+                if (this.readyState == 'complete')
+                    scriptLoaded();
+            }
+            script.onload = scriptLoaded;
+            script.src = '../../frontend/keylemon.min.js';
+            head.appendChild(script);
+        }
+
+        /**
+        * When the script is ready, initialize the KeyLemonJS
+        */
+        var kljsLoaded = false
+        function scriptLoaded() {
+            if(!kljsLoaded){
+                require(['keylemon'], function (keylemon) {
+                    keylemon.init({
+                        modality: "face",
+                        func: "create_identity",
+                        target: '#container',
+                        backendUrl: "../../backend",
+                        bundlePath: "../../frontend",
+                        floating: {
+                            closable: true,
+                            modalId: "keylemon-modal",
+                            title: "KeyLemonJS title",
+                            onClose : function(){
+                                alert('bye bye')
+                            }
+                        },
+                        preview: {
+                            width: 466,
+                            height: 350
+                        },
+                        faceDetect: true,
+                        eyeBlink: true,
+                        nbAuthenticationMax: undefined,
+                        bootstrap: true,
+                        fontawesome: true,
+                        onFinish: function (authenticated, liveness) {},
+                        onIdentityCreated :function(identityId, modelId){},
+                        onInitialized : function(){
+                            // keylemon is loaded, show the modal window
+                            $('#keylemon-modal').modal('show')
+                        }
+                    })
+                })
+                kljsLoaded = true
+            }
+        }
+
+        function hideModal() {
+            $("#keylemon-modal").modal("hide")
+        }
+    </script>
+
+    <div id="container"></div>
+
+        <button class="btn btn-primary btn-lg" onclick="javascript:runKeyLemonJS(); return false;">
+            Launch KeyLemonJS
+        </button>
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+# Even better : put these rules directly into your Apache
+# configuration file under a Directory section. 
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . keylemon.php [L,QSA]
